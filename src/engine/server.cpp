@@ -825,7 +825,6 @@ ServerType CServer::GetServerTypeFromName(const wxString& name)
 	return DEFAULT;
 }
 
-#include <iostream>
 LogonType CServer::GetLogonTypeFromName(const wxString& name)
 {
 	if (name == _("Normal"))
