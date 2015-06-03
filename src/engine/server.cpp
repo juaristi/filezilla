@@ -849,7 +849,6 @@ wxString CServer::GetNameFromLogonType(LogonType type)
 	switch (type)
 	{
 	case NORMAL:
-		std::cout << "Returning " << _("Normal") << std::endl;
 		return _("Normal");
 	case ASK:
 		return _("Ask for password");

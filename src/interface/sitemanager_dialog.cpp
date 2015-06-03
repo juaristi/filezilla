@@ -497,8 +497,6 @@ void CSiteManagerDialog::MarkConnectedSite(int connected_site)
 
 void CSiteManagerDialog::CreateControls(wxWindow* parent)
 {
-	wxString curStr;
-
 	if( !wxDialogEx::Load(parent, _T("ID_SITEMANAGER"))) {
 		return;
 	}
@@ -515,11 +513,7 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	pChoice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 	wxASSERT(pChoice);
 	for (int i = 0; i < LOGONTYPE_MAX; ++i)
-	{
-		curStr = CServer::GetNameFromLogonType((enum LogonType) i);
-		pChoice->Append(curStr);
-		std::cout << "Appending " << curStr << std::endl;
-	}
+		pChoice->Append(CServer::GetNameFromLogonType((enum LogonType)i));
 
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 	pEncryption->Append(_("Use explicit FTP over TLS if available"));
@@ -1573,6 +1567,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() != ANONYMOUS);
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(!predefined && (site_data->m_server.GetLogonType() == NORMAL || site_data->m_server.GetLogonType() == ACCOUNT));
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == ACCOUNT);
+		XRCCTRL(*this, "ID_KEYFILE", wxChoice)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
 
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
 		XRCCTRL(*this, "ID_LOGONTYPE", wxWindow)->Enable(!predefined);
