@@ -825,12 +825,15 @@ ServerType CServer::GetServerTypeFromName(const wxString& name)
 	return DEFAULT;
 }
 
+#include <iostream>
 LogonType CServer::GetLogonTypeFromName(const wxString& name)
 {
 	if (name == _("Normal"))
 		return NORMAL;
 	else if (name == _("Ask for password"))
 		return ASK;
+	else if (name == _("Key file"))
+		return KEY;
 	else if (name == _("Interactive"))
 		return INTERACTIVE;
 	else if (name == _("Account"))
@@ -846,9 +849,12 @@ wxString CServer::GetNameFromLogonType(LogonType type)
 	switch (type)
 	{
 	case NORMAL:
+		std::cout << "Returning " << _("Normal") << std::endl;
 		return _("Normal");
 	case ASK:
 		return _("Ask for password");
+	case KEY:
+		return _("Key file");
 	case INTERACTIVE:
 		return _("Interactive");
 	case ACCOUNT:

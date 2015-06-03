@@ -497,6 +497,8 @@ void CSiteManagerDialog::MarkConnectedSite(int connected_site)
 
 void CSiteManagerDialog::CreateControls(wxWindow* parent)
 {
+	wxString curStr;
+
 	if( !wxDialogEx::Load(parent, _T("ID_SITEMANAGER"))) {
 		return;
 	}
@@ -513,7 +515,11 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	pChoice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 	wxASSERT(pChoice);
 	for (int i = 0; i < LOGONTYPE_MAX; ++i)
-		pChoice->Append(CServer::GetNameFromLogonType((enum LogonType)i));
+	{
+		curStr = CServer::GetNameFromLogonType((enum LogonType) i);
+		pChoice->Append(curStr);
+		std::cout << "Appending " << curStr << std::endl;
+	}
 
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 	pEncryption->Append(_("Use explicit FTP over TLS if available"));
@@ -521,6 +527,9 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	pEncryption->Append(_("Require implicit FTP over TLS"));
 	pEncryption->Append(_("Only use plain FTP (insecure)"));
 	pEncryption->SetSelection(0);
+
+	wxChoice* pKeyFile = XRCCTRL(*this, "ID_KEYFILE", wxChoice);
+	pKeyFile->Append("This is a test");
 }
 
 void CSiteManagerDialog::OnOK(wxCommandEvent&)
@@ -1264,9 +1273,10 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 	if (!data)
 		return;
 
-	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(event.GetString() != _("Anonymous"));
+	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable((event.GetString() != _("Anonymous")) && (event.GetString() != _("Key file")));
 	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
 	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
+	XRCCTRL(*this, "ID_KEYFILE", wxChoice)->Enable(event.GetString() == _("Key file"));
 }
 
 bool CSiteManagerDialog::UpdateItem()

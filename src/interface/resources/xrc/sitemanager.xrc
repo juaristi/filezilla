@@ -214,6 +214,21 @@
                               <flag>wxGROW</flag>
                               <cellpos>7,1</cellpos>
                             </object>
+                            <vgap>5</vgap>
+                            <hgap>5</hgap>
+                            <object class="sizeritem">
+                              <object class="wxStaticText">
+                                <label>&amp;Key file:</label>
+                              </object>
+                              <cellpos>8,0</cellpos>
+                            </object>
+                            <object class="sizeritem">
+                              <object class="wxChoice" name="ID_KEYFILE">
+                                <selection>0</selection>
+                              </object>
+                              <flag>wxGROW</flag>
+                              <cellpos>8,1</cellpos>
+                            </object>
                           </object>
                           <flag>wxALL|wxGROW</flag>
                           <border>5</border>
