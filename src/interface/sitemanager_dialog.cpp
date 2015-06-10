@@ -521,9 +521,6 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	pEncryption->Append(_("Require implicit FTP over TLS"));
 	pEncryption->Append(_("Only use plain FTP (insecure)"));
 	pEncryption->SetSelection(0);
-
-	wxChoice* pKeyFile = XRCCTRL(*this, "ID_KEYFILE", wxChoice);
-	pKeyFile->Append("This is a test");
 }
 
 void CSiteManagerDialog::OnOK(wxCommandEvent&)
@@ -1267,10 +1264,10 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 	if (!data)
 		return;
 
-	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable((event.GetString() != _("Anonymous")) && (event.GetString() != _("Key file")));
+	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(event.GetString() != _("Anonymous"));
 	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
 	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
-	XRCCTRL(*this, "ID_KEYFILE", wxChoice)->Enable(event.GetString() == _("Key file"));
+	XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(event.GetString() == _("Key file"));
 }
 
 bool CSiteManagerDialog::UpdateItem()
@@ -1567,7 +1564,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() != ANONYMOUS);
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(!predefined && (site_data->m_server.GetLogonType() == NORMAL || site_data->m_server.GetLogonType() == ACCOUNT));
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == ACCOUNT);
-		XRCCTRL(*this, "ID_KEYFILE", wxChoice)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
 
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
 		XRCCTRL(*this, "ID_LOGONTYPE", wxWindow)->Enable(!predefined);

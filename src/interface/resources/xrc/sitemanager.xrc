@@ -223,11 +223,16 @@
                               <cellpos>8,0</cellpos>
                             </object>
                             <object class="sizeritem">
-                              <object class="wxChoice" name="ID_KEYFILE">
-                                <selection>0</selection>
-                              </object>
+                              <object class="wxTextCtrl" name="ID_KEYFILE"/>
                               <flag>wxGROW</flag>
                               <cellpos>8,1</cellpos>
+                            </object>
+                            <object class="sizeritem">
+                              <object class="wxButton" name="ID_KEYFILE_BROWSE">
+                                <label>Browse...</label>
+                              </object>
+                              <flag>wxGROW</flag>
+                              <cellpos>8,2</cellpos>
                             </object>
                           </object>
                           <flag>wxALL|wxGROW</flag>
