@@ -662,7 +662,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		{
 			wxString keyFile = server.GetKeyFile();
 			if (!keyFile.IsEmpty())
-				AddTextElement(node, "KeyFile", server.GetKeyFile());
+				AddTextElement(node, "Keyfile", keyFile);
 		}
 	}
 	AddTextElement(node, "Logontype", logonType);
