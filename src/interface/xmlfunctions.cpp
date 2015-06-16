@@ -658,6 +658,12 @@ void SetServer(TiXmlElement *node, const CServer& server)
 					AddTextElement(node, "Account", server.GetAccount());
 			}
 		}
+		else if (server.GetLogonType() == KEY)
+		{
+			wxString keyFile = server.GetKeyFile();
+			if (!keyFile.IsEmpty())
+				AddTextElement(node, "KeyFile", server.GetKeyFile());
+		}
 	}
 	AddTextElement(node, "Logontype", logonType);
 
