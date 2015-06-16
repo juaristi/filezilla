@@ -273,6 +273,14 @@ wxString CServer::GetAccount() const
 	return m_account;
 }
 
+wxString CServer::GetKeyFile() const
+{
+	if (m_logonType != KEY)
+		return wxString();
+
+	return m_keyFile;
+}
+
 CServer& CServer::operator=(const CServer &op)
 {
 	m_protocol = op.m_protocol;
@@ -573,6 +581,16 @@ bool CServer::SetAccount(const wxString& account)
 		return false;
 
 	m_account = account;
+
+	return true;
+}
+
+bool CServer::SetKeyFile(const wxString& keyFile)
+{
+	if (m_logonType != KEY)
+		return false;
+
+	m_keyFile = keyFile;
 
 	return true;
 }

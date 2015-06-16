@@ -1335,6 +1335,8 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 						   XRCCTRL(*this, "ID_PASS", wxTextCtrl)->GetValue());
 	server.m_server.SetAccount(XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue());
 
+	server.m_server.SetKeyFile(XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue());
+
 	server.m_comments = XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->GetValue();
 
 	const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
