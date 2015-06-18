@@ -1512,6 +1512,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(wxString());
 
 		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
@@ -1574,6 +1575,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(site_data->m_server.GetUser());
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(site_data->m_server.GetAccount());
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(site_data->m_server.GetPass());
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(site_data->m_server.GetKeyFile());
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(site_data->m_comments);
 		XRCCTRL(*this, "ID_COMMENTS", wxWindow)->Enable(!predefined);
 

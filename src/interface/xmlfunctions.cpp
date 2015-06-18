@@ -526,7 +526,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 	if (server.GetLogonType() != ANONYMOUS) {
 		wxString user = GetTextElement(node, "User");
 
-		wxString pass;
+		wxString pass, key;
 		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
 			TiXmlElement* passElement = node->FirstChildElement("Pass");
 			if (passElement) {
@@ -547,6 +547,16 @@ bool GetServer(TiXmlElement *node, CServer& server)
 					pass.clear();
 					server.SetLogonType(ASK);
 				}
+			}
+		} else if ((long)KEY == logonType) {
+			TiXmlElement* keyElement = node->FirstChildElement("Keyfile");
+
+			// password should be empty if we're using a key file
+			pass = wxString();
+
+			if (keyElement) {
+				key = GetTextElement(keyElement);
+				server.SetKeyFile(key);
 			}
 		}
 
