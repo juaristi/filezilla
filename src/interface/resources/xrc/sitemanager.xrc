@@ -230,6 +230,7 @@
                             <object class="sizeritem">
                               <object class="wxButton" name="ID_KEYFILE_BROWSE">
                                 <label>Browse...</label>
+                                <size>50,10d</size>
                               </object>
                               <flag>wxGROW</flag>
                               <cellpos>8,2</cellpos>
