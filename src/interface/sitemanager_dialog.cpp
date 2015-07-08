@@ -33,6 +33,7 @@ EVT_TREE_SEL_CHANGING(XRCID("ID_SITETREE"), CSiteManagerDialog::OnSelChanging)
 EVT_TREE_SEL_CHANGED(XRCID("ID_SITETREE"), CSiteManagerDialog::OnSelChanged)
 EVT_CHOICE(XRCID("ID_LOGONTYPE"), CSiteManagerDialog::OnLogontypeSelChanged)
 EVT_BUTTON(XRCID("ID_BROWSE"), CSiteManagerDialog::OnRemoteDirBrowse)
+EVT_BUTTON(XRCID("ID_KEYFILE_BROWSE"), CSiteManagerDialog::OnKeyFileBrowse)
 EVT_TREE_ITEM_ACTIVATED(XRCID("ID_SITETREE"), CSiteManagerDialog::OnItemActivated)
 EVT_CHECKBOX(XRCID("ID_LIMITMULTIPLE"), CSiteManagerDialog::OnLimitMultipleConnectionsChanged)
 EVT_RADIOBUTTON(XRCID("ID_CHARSET_AUTO"), CSiteManagerDialog::OnCharsetChange)
@@ -1425,6 +1426,28 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 	return true;
 }
 
+void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
+{
+	wxString wildcards("PPK files|*.ppk|PEM files|*.pem|All files|*.*");
+
+	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	if (!pTree)
+		return;
+
+	wxTreeItemId item = pTree->GetSelection();
+	if (!item.IsOk())
+		return;
+
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	if (!data)
+		return;
+
+	wxFileDialog dlg(this, _("Choose a key file"), "", "", wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+	if (dlg.ShowModal() == wxID_OK)
+	{
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(dlg.GetPath());
+	}
+}
 void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
@@ -1501,7 +1524,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(false);
-		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(false);
+		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(false);
 
 		// Empty all site information
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(wxString());
@@ -1547,7 +1570,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(true);
+		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(true);
 
 		XRCCTRL(*this, "ID_HOST", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(site_data->m_server.FormatHost(true));
@@ -1652,7 +1675,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(true);
+		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(true);
 
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(data->m_localDir);
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxWindow)->Enable(!predefined);
