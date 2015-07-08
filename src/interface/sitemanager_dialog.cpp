@@ -1269,6 +1269,7 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
 	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
 	XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(event.GetString() == _("Key file"));
+	XRCCTRL(*this, "ID_KEYFILE_BROWSE", wxButton)->Enable(event.GetString() == _("Key file"));
 }
 
 bool CSiteManagerDialog::UpdateItem()
