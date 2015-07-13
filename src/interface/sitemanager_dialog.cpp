@@ -11,6 +11,7 @@
 #include "window_state_manager.h"
 #include "wrapengine.h"
 #include "xmlfunctions.h"
+#include "settings/CFZPuttyGenInterface.h"
 
 #include <wx/dcclient.h>
 #include <wx/dnd.h>
@@ -1429,6 +1430,9 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 
 void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 {
+	CFZPuttyGenInterface* fzpg;
+	wxString executable;
+	wxString keyFilePath, keyFileComment, keyFileData;
 	wxString wildcards("PPK files|*.ppk|PEM files|*.pem|All files|*.*");
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
@@ -1446,7 +1450,20 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 	wxFileDialog dlg(this, _("Choose a key file"), "", "", wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 	if (dlg.ShowModal() == wxID_OK)
 	{
-		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(dlg.GetPath());
+		keyFilePath = dlg.GetPath();
+		executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
+		fzpg = new CFZPuttyGenInterface(executable, this);
+		// If the selected file was a PEM file, LoadKeyFile() will automatically convert it to PPK
+		// and tell us the new location.
+		if (fzpg->LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData))
+		{
+			XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFilePath);
+		}
+		else
+		{
+			wxMessageBoxEx(_("Could not load key file"), _("Error"), wxICON_EXCLAMATION);
+		}
+		delete fzpg;
 	}
 }
 void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)

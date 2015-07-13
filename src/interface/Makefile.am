@@ -66,6 +66,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		RemoteListView.cpp \
 		RemoteTreeView.cpp \
 		search.cpp \
+		settings/CFZPuttyGenInterface.cpp \
 		settings/optionspage.cpp \
 		settings/optionspage_connection.cpp \
 		settings/optionspage_connection_active.cpp \
@@ -181,6 +182,7 @@ noinst_HEADERS = aboutdialog.h \
 		 RemoteListView.h \
 		 RemoteTreeView.h \
 		 search.h \
+		 settings/CFZPuttyGenInterface.h \
 		 settings/optionspage.h \
 		 settings/optionspage_connection.h \
 		 settings/optionspage_connection_active.h \
