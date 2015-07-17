@@ -9,6 +9,10 @@ public:
 	CFZPuttyGenInterface(const wxString& executable, wxWindow* parent);
 	virtual ~CFZPuttyGenInterface();
 	bool LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data);
+	void EndProcess();
+	void DeleteProcess();
+	bool IsProcessCreated();
+	bool IsProcessStarted();
 
 protected:
 	wxProcess* m_pProcess;

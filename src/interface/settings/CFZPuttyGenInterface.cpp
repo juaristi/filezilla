@@ -15,11 +15,30 @@ CFZPuttyGenInterface::CFZPuttyGenInterface(const wxString& executable, wxWindow*
 CFZPuttyGenInterface::~CFZPuttyGenInterface()
 {
 	if (m_pProcess)
-	{
-		m_pProcess->CloseOutput();
-		m_pProcess->Detach();
-		m_pProcess = 0;
-	}
+		EndProcess();
+}
+
+void CFZPuttyGenInterface::EndProcess()
+{
+	m_pProcess->CloseOutput();
+	m_pProcess->Detach();
+	m_pProcess = 0;
+}
+
+void CFZPuttyGenInterface::DeleteProcess()
+{
+	delete m_pProcess;
+	m_pProcess = 0;
+}
+
+bool CFZPuttyGenInterface::IsProcessCreated()
+{
+	return m_pProcess != 0;
+}
+
+bool CFZPuttyGenInterface::IsProcessStarted()
+{
+	return m_initialized;
 }
 
 bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data)
