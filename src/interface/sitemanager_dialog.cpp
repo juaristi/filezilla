@@ -15,6 +15,7 @@
 
 #include <wx/dcclient.h>
 #include <wx/dnd.h>
+#include <wx/file.h>
 
 #ifdef __WXMSW__
 #include "commctrl.h"
@@ -1036,6 +1037,33 @@ bool CSiteManagerDialog::Verify()
 			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You have to enter an account name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
+		}
+
+		// In key file logon type, check that the provided key file exists
+		wxString keyFile, keyFileComment, keyFileData;
+		if (logon_type == KEY)
+		{
+			keyFile = XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue();
+			if (keyFile.empty())
+			{
+				wxMessageBox(_("You have to enter a key file path"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+			if (!wxFile::Exists(keyFile))
+			{
+				wxMessageBox(_("The specified key file does not exist"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+			if (!wxFile::Access(keyFile, wxFile::read))
+			{
+				wxMessageBox(_("The specified key file is not readable"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+
+			// Check (again) that the key file is in the correct format since it might have been introduced manually
+			CFZPuttyGenInterface cfzg(COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE), this);
+			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
+				XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
 		}
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
