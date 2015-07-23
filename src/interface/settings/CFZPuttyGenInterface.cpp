@@ -41,13 +41,11 @@ bool CFZPuttyGenInterface::IsProcessStarted()
 	return m_initialized;
 }
 
-bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data)
+bool CFZPuttyGenInterface::IsKeyFileValid(wxString keyFile, bool silent)
 {
-	wxString msg, reply;
+	bool result = false;
+	wxString reply;
 	enum ReplyCode code;
-	bool encrypted = false, needs_conversion = false;
-	int res = 0;
-	CInputDialog dlg;
 
 	if (!LoadProcess())
 		return false;
@@ -73,10 +71,23 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		if (silent)
 			return false;
 
-		needs_conversion = true;
+		// This is a PPK key
+		result = false;
 	}
 	else
-		needs_conversion = false;
+		result = true;
+
+	return result;
+}
+
+bool CFZPuttyGenInterface::IsKeyFileEncrypted(wxString keyFile, bool silent)
+{
+	bool result = false;
+	wxString reply;
+	enum ReplyCode code;
+
+	if (!LoadProcess())
+		return false;
 
 	if (!Send(_T("encrypted")))
 		return false;
@@ -92,10 +103,25 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		if (silent)
 			return false;
 
-		encrypted = true;
+		result = true;
 	}
 	else
-		encrypted = false;
+		result = false;
+
+	return result;
+}
+
+bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data)
+{
+	wxString msg, reply;
+	enum ReplyCode code;
+	bool encrypted = false, needs_conversion = false;
+	int res = 0;
+	CInputDialog dlg;
+
+	// If the key file is not valid, then it needs conversion
+	needs_conversion = !IsKeyFileValid(keyFile, silent);
+	encrypted = IsKeyFileEncrypted(keyFile, silent);
 
 	if (encrypted || needs_conversion)
 	{

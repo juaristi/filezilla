@@ -1062,8 +1062,16 @@ bool CSiteManagerDialog::Verify()
 
 			// Check (again) that the key file is in the correct format since it might have been introduced manually
 			CFZPuttyGenInterface cfzg(COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE), this);
-			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
-				XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
+			if (!cfzg.IsKeyFileValid(keyFile, false))
+			{
+				if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
+					XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
+				else
+				{
+					wxMessageBoxEx(_("Could not load key file"), _("Error"), wxICON_EXCLAMATION);
+					return false;
+				}
+			}
 		}
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
