@@ -291,6 +291,7 @@ CServer& CServer::operator=(const CServer &op)
 	m_user = op.m_user;
 	m_pass = op.m_pass;
 	m_account = op.m_account;
+	m_keyFile = op.m_keyFile;
 	m_timezoneOffset = op.m_timezoneOffset;
 	m_pasvMode = op.m_pasvMode;
 	m_maximumMultipleConnections = op.m_maximumMultipleConnections;
@@ -330,6 +331,11 @@ bool CServer::operator==(const CServer &op) const
 			if (m_pass != op.m_pass)
 				return false;
 			if (m_account != op.m_account)
+				return false;
+		}
+		else if (m_logonType == KEY)
+		{
+			if (m_keyFile != op.m_keyFile)
 				return false;
 		}
 	}
